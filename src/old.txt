@@ -1,0 +1,430 @@
+/* src/app.css */
+
+/* No need for @import 'tailwindcss'; if not using Tailwind classes directly */
+
+:root {
+	/* === Fun & Friendly Color Palette === */
+	/* Inspired by building blocks and nature */
+	--font-family-base:
+		'ZhuyinFont', /* Custom font first! */ system-ui, -apple-system, BlinkMacSystemFont,
+		'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+		sans-serif; /* Standard fallbacks */
+
+	--color-sky-blue: #87ceeb; /* Lighter, friendly blue */
+	--color-grass-green: #5cb85c; /* Softer, natural green */
+	--color-sun-yellow: #ffcc00; /* Bright, cheerful yellow */
+	--color-stop-red: #e74c3c; /* Clear but less harsh red */
+	--color-cloud-gray: #f0f0f0; /* Very light gray for backgrounds */
+	--color-stone-gray: #a9a9a9; /* Medium gray for borders/muted text */
+	--color-earth-brown: #a0522d; /* A friendly brown for accents */
+	--color-white: #ffffff;
+	--color-text-dark: #333333; /* Keep text readable */
+
+	/* Map to semantic variables */
+	--color-primary: var(--color-sky-blue);
+	--color-success: var(--color-grass-green);
+	--color-warning: var(--color-sun-yellow);
+	--color-danger: var(--color-stop-red);
+	--color-secondary: var(--color-stone-gray);
+	--color-info: var(--color-sky-blue); /* Use primary blue for info */
+
+	--color-text: var(--color-text-dark);
+	--color-text-muted: #6c757d; /* Keep muted distinct */
+	--color-bg: var(--color-cloud-gray); /* Lighter page background */
+	--color-bg-container: var(--color-white); /* White for main container */
+	--color-bg-section-light: #e6f7ff; /* Very light blue tint */
+	--color-bg-section-alt: #f8f9fa; /* Slightly off-white */
+
+	--border-color: #dcdcdc; /* Softer border color */
+	--border-radius-soft: 8px; /* More rounded corners */
+	--border-radius-round: 50%; /* For circular buttons */
+	--box-shadow-subtle: 0 2px 4px rgba(0, 0, 0, 0.08); /* Softer shadow */
+	--box-shadow-strong: 0 4px 8px rgba(0, 0, 0, 0.12); /* More pronounced shadow */
+
+	/* Spacing (keep consistent, maybe slightly larger gaps) */
+	--spacing-1: 0.25rem; /* 4px */
+	--spacing-2: 0.6rem; /* ~10px */
+	--spacing-3: 1.1rem; /* ~18px */
+	--spacing-4: 1.6rem; /* ~26px */
+	--spacing-5: 3rem; /* 48px */
+
+	/* Transitions */
+	--transition-fast: all 0.2s ease-in-out;
+	--transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Bouncy effect */
+}
+
+/* === Base Styles === */
+@font-face {
+	font-family: 'ZhuyinFont';
+	src: url('/fonts/王漢宗中明體注音.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
+body,
+html {
+	margin: 0;
+	padding: 0;
+	font-family: var(--font-family-base);
+	font-size: 18px; /* Slightly larger base size */
+	line-height: 1.6;
+	color: var(--color-text);
+	background-color: var(--color-bg);
+	overscroll-behavior: contain;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* === Layout === */
+.app-container {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	max-width: 1000px; /* Keep it manageable */
+	margin: var(--spacing-2) auto; /* Add some space around container */
+	background-color: var(--color-bg-container);
+	box-shadow: var(--box-shadow-strong);
+	border-radius: var(--border-radius-soft); /* Round container corners */
+	overflow: hidden; /* Keep content contained by rounded corners */
+}
+
+/* === Section Styling === */
+.word-bank-section,
+.controls-section,
+.confirmation-buttons { /* Style confirmation buttons similarly */
+	padding: var(--spacing-3) var(--spacing-4);
+	border-bottom: 2px dashed var(--border-color); /* Dashed line for fun */
+}
+.word-bank-section {
+	background-color: var(--color-bg-section-light); /* Light blue tint */
+}
+.controls-section {
+	background-color: var(--color-bg-section-alt); /* Off-white */
+	border-bottom: none;
+	border-top: 2px dashed var(--border-color);
+	text-align: center;
+}
+.confirmation-buttons {
+	background-color: #fffacd; /* Light yellow background when active */
+	border-top: 2px dashed var(--border-color);
+	border-bottom: 2px dashed var(--border-color);
+}
+
+/* === Word Bank === */
+.room-selector label {
+	margin-right: var(--spacing-2);
+	font-weight: 600; /* Bolder label */
+	color: var(--color-earth-brown); /* Use accent color */
+}
+.room-selector select {
+	padding: var(--spacing-2) var(--spacing-3);
+	font-size: 1em;
+	font-family: inherit;
+	border: 2px solid var(--border-color); /* Slightly thicker border */
+	border-radius: var(--border-radius-soft);
+	background-color: var(--color-white);
+	cursor: pointer;
+	transition: var(--transition-fast);
+}
+.room-selector select:focus {
+	outline: none;
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 3px hsla(206, 82%, 75%, 0.5); /* Softer focus ring */
+}
+
+.word-list {
+	list-style: none;
+	padding: 0;
+	margin-top: var(--spacing-3);
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--spacing-2) var(--spacing-3); /* More gap */
+}
+
+.word-list li {
+	background-color: var(--color-white);
+	padding: var(--spacing-2) var(--spacing-3); /* More padding */
+	border-radius: 20px; /* Pill shape */
+	border: 1px solid var(--border-color);
+	font-size: 1.1em;
+	font-weight: 500; /* Slightly bolder */
+	box-shadow: var(--box-shadow-subtle);
+	transition: var(--transition-bounce); /* Use bounce transition */
+	cursor: default; /* Indicate not directly clickable (unless they become draggable?) */
+}
+.word-list li:hover {
+	transform: scale(1.08); /* Pop effect */
+	box-shadow: var(--box-shadow-strong);
+	border-color: var(--color-primary); /* Highlight border */
+}
+
+/* === Canvas Section === */
+.canvas-section {
+	flex-grow: 1;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+	background-color: var(--color-bg); /* Use main page background */
+	padding: var(--spacing-3);
+}
+
+#konva-container {
+	border: 3px solid var(--color-earth-brown); /* Thicker, brown border like a frame */
+	border-radius: var(--border-radius-soft); /* Match rounding */
+	background-image: url('/images/room-background.png');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	box-shadow: var(--box-shadow-strong); /* Stronger shadow */
+	overflow: hidden; /* Ensure background stays within border */
+}
+
+/* === Controls Section === */
+.instructions {
+	margin-bottom: var(--spacing-3);
+	font-size: 1.2em; /* Bigger instructions */
+	color: var(--color-text-muted);
+	font-weight: 500;
+}
+
+.input-area form {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: var(--spacing-2);
+	margin-bottom: var(--spacing-3);
+}
+
+.input-area input[type='text'] {
+	padding: var(--spacing-2) var(--spacing-3);
+	font-size: 1.1em;
+	width: 320px; /* Slightly wider */
+	font-family: inherit;
+	border: 2px solid var(--border-color); /* Thicker border */
+	border-radius: var(--border-radius-soft);
+	transition: var(--transition-fast);
+}
+.input-area input[type='text']:focus {
+	outline: none;
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 3px hsla(206, 82%, 75%, 0.5); /* Softer focus ring */
+}
+
+/* === General Button Styles === */
+button {
+	cursor: pointer;
+	font-family: inherit;
+	transition: var(--transition-fast);
+	border-radius: var(--border-radius-soft); /* Softer radius */
+	padding: var(--spacing-2) var(--spacing-3);
+	font-size: 1em;
+	font-weight: 600; /* Bolder buttons */
+	border: 2px solid transparent; /* Base border */
+	line-height: 1.5;
+	box-shadow: var(--box-shadow-subtle);
+}
+button:hover:not(:disabled) {
+	transform: translateY(-2px); /* Lift effect */
+	box-shadow: var(--box-shadow-strong);
+}
+button:active:not(:disabled) {
+	transform: translateY(1px); /* Press effect */
+	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+button:focus {
+	outline: none;
+	box-shadow: 0 0 0 3px hsla(206, 82%, 75%, 0.5); /* Softer focus ring */
+}
+button:disabled {
+	background-color: #cccccc; /* Clearer disabled color */
+	border-color: #cccccc;
+	color: #888888;
+	opacity: 0.7;
+	cursor: not-allowed;
+	box-shadow: none;
+	transform: none;
+}
+
+/* === Specific Button Styles === */
+.input-area button[type='submit'] {
+	background-color: var(--color-success);
+	border-color: var(--color-success);
+	color: white;
+	font-size: 1.3em; /* Make checkmark bigger */
+	padding: var(--spacing-2);
+	line-height: 1;
+}
+.input-area button[type='submit']:hover:not(:disabled) {
+	background-color: #4cae4c; /* Slightly darker green */
+	border-color: #4cae4c;
+}
+
+.action-buttons {
+	display: flex;
+	justify-content: center;
+	gap: var(--spacing-3); /* More gap between action buttons */
+}
+
+.action-buttons button {
+	color: white;
+	font-size: 1em;
+	padding: var(--spacing-2) var(--spacing-3);
+}
+
+.undo-button,
+.redo-button {
+	background-color: var(--color-warning);
+	border-color: var(--color-warning);
+	color: var(--color-text-dark); /* Darker text on yellow */
+}
+.undo-button:hover:not(:disabled),
+.redo-button:hover:not(:disabled) {
+	background-color: #f8b800;
+	border-color: #f8b800;
+}
+
+.delete-button {
+	background-color: var(--color-danger);
+	border-color: var(--color-danger);
+}
+.delete-button:hover:not(:disabled) {
+	background-color: #d9534f;
+	border-color: #d9534f;
+}
+
+/* === Pop-up Modal (Image Selector) === */
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.6); /* Slightly darker overlay for focus */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+	padding: var(--spacing-3);
+}
+.modal-overlay:focus {
+	outline: none;
+}
+
+.modal-content {
+	background-color: var(--color-white);
+	padding: var(--spacing-4); /* Generous padding */
+	border-radius: 15px; /* Even more rounded */
+	text-align: center;
+	max-width: 90%;
+	max-height: 90vh;
+	overflow-y: auto;
+	width: 650px; /* Slightly larger default */
+	box-shadow: var(--box-shadow-strong);
+	border: 4px solid var(--color-primary); /* Blue border around modal */
+}
+
+.modal-instructions {
+	margin-bottom: var(--spacing-4);
+	font-size: 1.4em; /* Larger instruction text */
+	font-weight: 600;
+	color: var(--color-earth-brown); /* Use accent color */
+}
+
+.image-choices {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: var(--spacing-4); /* More space between images */
+	flex-wrap: wrap;
+}
+
+.image-choices img { /* Style the images directly if no button wrapper */
+	width: 100px; /* Example size, adjust as needed */
+	height: 100px;
+	object-fit: contain; /* Ensure image fits well */
+	border: 3px solid transparent; /* Border for selection state */
+	border-radius: var(--border-radius-soft);
+	padding: 5px; /* Padding around image */
+	background-color: #f8f8f8; /* Light bg behind image */
+	cursor: pointer;
+	transition: var(--transition-bounce); /* Bouncy transition */
+	box-shadow: var(--box-shadow-subtle);
+}
+
+.image-choices img:hover {
+	transform: scale(1.1); /* Scale up on hover */
+	border-color: var(--color-warning); /* Yellow border on hover */
+	box-shadow: var(--box-shadow-strong);
+}
+
+/* Suggestion: Add a class for selected image (e.g., `.selected-image`) */
+/* .image-choices img.selected-image {
+    border-color: var(--color-success);
+    transform: scale(1.05);
+    box-shadow: var(--box-shadow-strong);
+} */
+
+/* Modal Close Button (if using a generic button element) */
+.modal-content > button { /* Target button directly inside modal-content */
+	margin-top: var(--spacing-4);
+	background-color: var(--color-secondary);
+	border-color: var(--color-secondary);
+	color: white;
+}
+.modal-content > button:hover:not(:disabled) {
+	background-color: #888888; /* Darker gray */
+	border-color: #888888;
+}
+
+/* === Error Message === */
+.error-message {
+	color: var(--color-danger);
+	background-color: #fdecea; /* Lighter red background */
+	border: 2px solid var(--color-danger);
+	padding: var(--spacing-2) var(--spacing-3);
+	border-radius: var(--border-radius-soft);
+	margin-top: var(--spacing-2);
+	display: inline-block; /* Keep it tight */
+	font-size: 1em;
+	font-weight: 500; /* Make error text clearer */
+}
+
+/* === Confirmation Buttons (Check/Cross) === */
+.confirm-button,
+.cancel-button {
+	font-size: 1.8em; /* Even bigger icons */
+	padding: var(--spacing-2); /* Adjust padding for circle */
+	margin: 0 var(--spacing-3); /* More space between */
+	border: none;
+	border-radius: var(--border-radius-round); /* Perfectly round */
+	color: white;
+	width: 60px; /* Fixed larger size */
+	height: 60px;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	line-height: 1;
+	box-shadow: var(--box-shadow-strong); /* Strong shadow */
+	transition: var(--transition-bounce); /* Bounce on hover */
+}
+.confirm-button:hover:not(:disabled),
+.cancel-button:hover:not(:disabled) {
+	transform: scale(1.15); /* More dramatic scale */
+}
+
+.confirm-button {
+	background-color: var(--color-success);
+}
+.confirm-button:hover:not(:disabled) {
+	background-color: #4cae4c;
+}
+
+.cancel-button {
+	background-color: var(--color-danger);
+}
+.cancel-button:hover:not(:disabled) {
+	background-color: #d9534f;
+}

@@ -125,8 +125,9 @@
 	function selectItemForDeletion(node) {
 		deselectItem(); // Deselect any previous item first
 		selectedPlacedItem = node;
-		selectedPlacedItem.draggable(true); // Make it draggable temporarily perhaps? Or just highlight.
+		selectedPlacedItem.draggable(true); // Make it draggable
 		konvaTransformer.nodes([node]); // Attach transformer for visual feedback
+		currentManipulatingImage = node; // Set as current manipulating image to show confirmation buttons
 		konvaLayer.batchDraw();
 	}
 
@@ -254,12 +255,18 @@
 	function handleConfirmPlacement() {
 		if (!currentManipulatingImage) return;
 
+		// Check if this is a previously placed item we're modifying
+		const isExistingItem = selectedPlacedItem === currentManipulatingImage;
+
 		// Finalize: make it non-draggable, remove transformer
 		currentManipulatingImage.draggable(false);
 		konvaTransformer.nodes([]); // Detach transformer
 
-		// Clear the reference to the image being manipulated
+		// Clear the references
 		currentManipulatingImage = null;
+		if (isExistingItem) {
+			selectedPlacedItem = null;
+		}
 
 		konvaLayer.batchDraw();
 		saveHistory(); // Save state AFTER confirming
@@ -268,11 +275,18 @@
 	function handleCancelPlacement() {
 		if (!currentManipulatingImage) return;
 
+		// Always destroy the image when canceling - for both new placements and existing items
 		konvaTransformer.nodes([]); // Detach transformer first
 		currentManipulatingImage.destroy(); // Remove from canvas
+		
+		// Clear references
+		if (selectedPlacedItem === currentManipulatingImage) {
+			selectedPlacedItem = null;
+		}
 		currentManipulatingImage = null;
+		
 		konvaLayer.batchDraw();
-		// Do NOT save history on cancel
+		saveHistory(); // Save state after deletion
 	}
 
 	function handleDelete() {
@@ -389,12 +403,8 @@
 					aria-label="確定放置物品 Confirm placement"
 					on:click={handleConfirmPlacement}
 				>
-					<svg
-						class="button-icon"
-						viewBox="0 0 24 24"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" fill="currentColor" />
+					<svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+						<path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" fill="white" />
 					</svg>
 				</button>
 				<button
@@ -403,14 +413,10 @@
 					aria-label="取消放置 Cancel placement"
 					on:click={handleCancelPlacement}
 				>
-					<svg
-						class="button-icon"
-						viewBox="0 0 24 24"
-						xmlns="http://www.w3.org/2000/svg"
-					>
+					<svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 						<path
 							d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
-							fill="currentColor"
+							fill="white"
 						/>
 					</svg>
 				</button>
@@ -440,24 +446,8 @@
 				<div class="error-message">{errorMessage}</div>
 			{/if}
 		</div>
-		<div class="action-buttons">
-			<button
-				class="undo-button"
-				on:click={handleUndo}
-				disabled={!canUndo}
-				aria-label="撤銷上一步操作 Undo last action"
-			>
-				撤銷
-			</button>
-			<button
-				class="delete-button"
-				on:click={handleDelete}
-				disabled={!canDelete}
-				aria-label="刪除選中的物品 Delete selected item"
-			>
-				刪除
-			</button>
-		</div>
+		<!-- Action buttons (undo/delete) removed -->
+		<!-- Click item again to show confirmation buttons for moving or deleting -->
 	</section>
 </div>
 
@@ -517,33 +507,6 @@
 		z-index: 10;
 	}
 
-	.canvas-confirmation-buttons .confirm-button,
-	.canvas-confirmation-buttons .cancel-button {
-		width: 60px;
-		height: 60px;
-		border-radius: 50%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 1.8rem;
-		font-weight: bold;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-		border: 2px solid rgba(255, 255, 255, 0.7);
-		transition: all 0.2s ease;
-		text-align: center;
-		line-height: 0; /* Fix alignment issues with characters */
-	}
-
-	/* SVG styling to ensure visibility */
-	.button-icon {
-		width: 28px !important;
-		height: 28px !important;
-		display: inline-flex !important;
-		position: relative;
-		z-index: 100;
-		color: white;
-	}
-
 	.canvas-confirmation-buttons .confirm-button {
 		background: var(--color-success);
 		color: white;
@@ -574,10 +537,6 @@
 		}
 	}
 
-	.shake-animation {
-		animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-	}
-
 	/* Responsive adjustments for confirmation buttons */
 	@media (max-width: 480px) {
 		.canvas-confirmation-buttons {
@@ -590,12 +549,6 @@
 			width: 45px;
 			height: 45px;
 			font-size: 1.5rem;
-		}
-
-		/* Adjust for smaller button on mobile */
-		.button-icon {
-			width: 20px !important;
-			height: 20px !important;
 		}
 	}
 </style>

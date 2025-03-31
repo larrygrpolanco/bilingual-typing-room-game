@@ -481,9 +481,10 @@ button:disabled {
 
 /* SVG icon for buttons that needs to be fixed */
 .svg-icon {
+    display: flex;
 	width: 28px;
 	height: 28px;
-	z-index: 999;
+	z-index: 10;
 	position: relative;
 	color: white;
 	fill: white;

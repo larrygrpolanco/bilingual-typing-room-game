@@ -49,7 +49,7 @@
 		if (container) {
 			container.style.backgroundImage = `url('/images/${roomBackground}')`;
 		}
-		
+
 		// Register service worker for caching
 		if ('serviceWorker' in navigator) {
 			try {
@@ -77,22 +77,22 @@
 			container.style.backgroundImage = `url('/images/${roomBackground}')`;
 		}
 	}
-	
+
 	// --- Save Room Function ---
 	function saveRoom() {
 		if (!Konva || !konvaStage || !konvaLayer) {
 			showTemporaryError('無法儲存房間。請再試一次。', true);
 			return;
 		}
-		
+
 		try {
 			// Create a name for the room
 			const timestamp = new Date().toISOString();
 			const roomName = `${roomTranslations[selectedRoom]} - ${new Date().toLocaleString()}`;
-			
+
 			// Get the stage data to save
 			const stageData = konvaLayer.toJSON();
-			
+
 			// Create the room object to save
 			const roomToSave = {
 				name: roomName,
@@ -103,18 +103,18 @@
 				originalWidth: konvaStage.width(),
 				originalHeight: konvaStage.height()
 			};
-			
+
 			// Get existing saved rooms or initialize empty array
 			let savedRooms = [];
 			const existingRooms = localStorage.getItem('savedRooms');
 			if (existingRooms) {
 				savedRooms = JSON.parse(existingRooms);
 			}
-			
+
 			// Add new room and save back to localStorage
 			savedRooms.push(roomToSave);
 			localStorage.setItem('savedRooms', JSON.stringify(savedRooms));
-			
+
 			showTemporaryError('房間儲存成功！', false);
 			setTimeout(() => {
 				errorMessage = null;
@@ -436,7 +436,7 @@
 			currentBackground={roomBackground}
 			on:backgroundChange={handleBackgroundChange}
 		/>
-		
+
 		<!-- Canvas action buttons -->
 		<div class="canvas-action-buttons">
 			<!-- Save Room Button -->
@@ -447,13 +447,16 @@
 				on:click={saveRoom}
 			>
 				<svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-					<path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" fill="white" />
+					<path
+						d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"
+						fill="white"
+					/>
 				</svg>
 				<span>儲存房間</span>
 			</button>
-			
+
 			<!-- Undo Button -->
-			<button
+			<!-- <button
 				class="undo-button {canUndo ? '' : 'disabled'}"
 				title="撤銷"
 				aria-label="撤銷上一步操作 Undo last action"
@@ -464,7 +467,7 @@
 					<path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" fill="white" />
 				</svg>
 				<span>撤銷</span>
-			</button>
+			</button> -->
 		</div>
 
 		<!-- Confirmation Buttons inside canvas section -->
@@ -689,10 +692,10 @@
 		margin: 0 auto;
 		transition: background-image 0.3s ease;
 	}
-	
+
 	.canvas-action-buttons {
 		position: absolute;
-		top: 20px;
+		bottom: 20px;
 		right: 20px;
 		display: flex;
 		flex-direction: column;
@@ -700,7 +703,8 @@
 		z-index: 10;
 	}
 
-	.save-button, .undo-button {
+	.save-button,
+	.undo-button {
 		display: flex;
 		align-items: center;
 		gap: 5px;

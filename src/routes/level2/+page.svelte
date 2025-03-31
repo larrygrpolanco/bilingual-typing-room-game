@@ -438,8 +438,7 @@
 		/>
 
 		<!-- Canvas action buttons -->
-		<div class="canvas-action-buttons">
-			<!-- Save Room Button -->
+		<!-- <div class="canvas-action-buttons">
 			<button
 				class="save-button"
 				title="儲存房間"
@@ -455,8 +454,7 @@
 				<span>儲存房間</span>
 			</button>
 
-			<!-- Undo Button -->
-			<!-- <button
+			<button
 				class="undo-button {canUndo ? '' : 'disabled'}"
 				title="撤銷"
 				aria-label="撤銷上一步操作 Undo last action"
@@ -464,11 +462,14 @@
 				disabled={!canUndo}
 			>
 				<svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-					<path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" fill="white" />
+					<path
+						d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"
+						fill="white"
+					/>
 				</svg>
 				<span>撤銷</span>
-			</button> -->
-		</div>
+			</button>
+		</div> -->
 
 		<!-- Confirmation Buttons inside canvas section -->
 		{#if currentManipulatingImage}

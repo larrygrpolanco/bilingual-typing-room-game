@@ -11,7 +11,7 @@
 		<a href="/level2" class="level-button">Level 2</a>
 	</div>
 
-	<a href="/gallery" class="gallery-button">Gallery</a>
+	<!-- <a href="/gallery" class="gallery-button">Gallery</a> -->
 </div>
 
 <style>
